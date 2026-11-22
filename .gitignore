@@ -6,8 +6,7 @@ __pycache__/
 venv/
 env/
 
-# Downloaded Vosk model (place it next to mainn.py; do not commit it)
-vosk-model-*/
+# Model archive (the extracted model is committed; ignore the zip)
 *.zip
 
 # OS / editor

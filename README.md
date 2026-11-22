@@ -36,16 +36,14 @@ Microphone  ->  Vosk (offline speech-to-text)  ->  command matching
 ## Project structure
 
 ```
-mainn.py            Main program (speech -> reply -> robot)
-requirements.txt    Python dependencies
-README.md           This file
-README              Original Vosk model notes (from Alpha Cephei)
-final.mat           \
-final.dubm           |
-global_cmvn.stats    |  Vosk/Kaldi acoustic-model config files
-online_cmvn.conf     |  (kept for reference — see "Model" below)
-splice.conf          |
-word_boundary.int   /
+mainn.py                        Main program (speech -> reply -> robot)
+requirements.txt                Python dependencies
+README.md                       This file
+vosk-model-small-en-us-0.15/    Offline speech model (included)
+├── am/                         Acoustic model
+├── conf/                       Feature configs
+├── graph/                      Decoding graph
+└── ivector/                    Speaker/feature stats
 ```
 
 ## Setup
@@ -62,9 +60,9 @@ word_boundary.int   /
    sudo apt-get install libportaudio2
    ```
 
-2. **Download the Vosk model.** Get `vosk-model-small-en-us-0.15` from
-   <https://alphacephei.com/vosk/models> and unzip it so the folder sits next to
-   `mainn.py`:
+2. **Use the included Vosk model.** The `vosk-model-small-en-us-0.15` folder is
+   already committed in this repository next to `mainn.py`, so no download is
+   needed:
 
    ```
    NLP-for-Robotics/
@@ -76,7 +74,9 @@ word_boundary.int   /
        └── ...
    ```
 
-   Alternatively, point to it with the `VOSK_MODEL_PATH` environment variable:
+   If the folder is missing (for example you cloned without large files), download
+   it from <https://alphacephei.com/vosk/models> and unzip it next to `mainn.py`, or
+   point to it with the `VOSK_MODEL_PATH` environment variable:
 
    ```bash
    set VOSK_MODEL_PATH=C:\path\to\vosk-model-small-en-us-0.15   # Windows
@@ -84,10 +84,9 @@ word_boundary.int   /
    ```
 
    > **Note:** the `final.mat`, `final.dubm`, `global_cmvn.stats`, `online_cmvn.conf`,
-   > `splice.conf` and `word_boundary.int` files in this repo are only a few
-   > configuration pieces of the model. The full model directory (including
-   > `am/final.mdl`, `graph/HCLG.fst`, etc.) is required and is **not** stored in
-   > this repository because it is large — always download it from the link above.
+   > `splice.conf` and `word_boundary.int` files in the repository root are copies of
+   > files that also live inside `vosk-model-small-en-us-0.15/`; they are harmless
+   > leftovers and are not needed to run the program.
 
 3. **Upload the Arduino sketch** (see below) and connect the board by USB.
 
